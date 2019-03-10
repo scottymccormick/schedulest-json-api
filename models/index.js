@@ -24,4 +24,5 @@ module.exports = {
   User: require('./User'),
   Organization: require('./Organization'),
   Location: require('./Location'),
+  Booking: require('./Booking'),
 }
