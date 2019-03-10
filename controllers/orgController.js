@@ -8,4 +8,16 @@ router.get('/', (req, res) => {
   res.send('Org Index route')
 })
 
+// ORG CREATE
+router.post('/', (req, res) => {
+  console.log('req.body', req.body)
+  db.Organization.create(req.body, (err, newOrg) => {
+    if (err) res.json(400, err)
+    res.json({
+      message: 'Success!',
+      org: newOrg
+    })
+  })
+})
+
 module.exports = router
