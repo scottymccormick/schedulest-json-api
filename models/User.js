@@ -7,7 +7,7 @@ const userSchema = new Schema({
   password: String,
   phone: String,
   googleId: String,
-  organization: [{
+  organizations: [{
     type: Schema.Types.ObjectId,
     ref: 'Organization'
   }]

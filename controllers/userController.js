@@ -23,9 +23,21 @@ router.post('/', async (req, res) => {
     if (existingEmailUser || existingGoogleIdUser) {
       throw Error('A user with that email already exists')
     }
-    
+
     const newUser = await db.User.create(req.body)
     res.status(201).json(newUser)
+  } catch (error) {
+    res.status(400).json({message: error.message})
+  }
+})
+
+// USER UPDATE
+router.put('/:id', async (req, res) => {
+  try {
+    const foundUser = await db.User.findByIdAndUpdate(
+      req.params.id, req.body, {new: true})
+
+    res.status(201).json(foundUser)
   } catch (error) {
     res.status(400).json({message: error.message})
   }
