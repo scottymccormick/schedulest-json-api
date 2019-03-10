@@ -1,0 +1,24 @@
+{
+  "name": "schedulest-json-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scottymccormick/schedulest-json-api.git"
+  },
+  "author": "Scotty McCormick",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/scottymccormick/schedulest-json-api/issues"
+  },
+  "homepage": "https://github.com/scottymccormick/schedulest-json-api#readme",
+  "dependencies": {
+    "dotenv": "^6.2.0",
+    "express": "^4.16.4",
+    "mongoose": "^5.4.18"
+  }
+}
