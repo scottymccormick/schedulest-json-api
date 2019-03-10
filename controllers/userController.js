@@ -3,6 +3,10 @@ const router  = express.Router()
 
 const db = require('../models')
 
+const formatUserResponse = ({ _id, name, email, googleId, organizations }) => {
+  return { _id, name, email, googleId, organizations}
+}
+
 // USER INDEX
 router.get('/', async (req, res) => {
   try {
@@ -26,6 +30,17 @@ router.post('/', async (req, res) => {
 
     const newUser = await db.User.create(req.body)
     res.status(201).json(newUser)
+  } catch (error) {
+    res.status(400).json({message: error.message})
+  }
+})
+
+// USER SHOW
+router.get('/:id', async (req, res) => {
+  try {
+    const foundUser = await db.User.findById(req.params.id)
+
+    res.json(formatUserResponse(foundUser))
   } catch (error) {
     res.status(400).json({message: error.message})
   }
