@@ -22,5 +22,6 @@ mongoose.connection.on('disconnected', () => {
 
 module.exports = {
   User: require('./User'),
-  Organization: require('./Organization')
+  Organization: require('./Organization'),
+  Location: require('./Location'),
 }
