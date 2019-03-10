@@ -4,7 +4,8 @@ const Schema = mongoose.Schema
 const orgSchema = new Schema({
   name: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   hourlyRate: {
     type: Number,
