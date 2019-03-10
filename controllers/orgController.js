@@ -18,13 +18,21 @@ router.get('/', (req, res) => {
 
 // ORG CREATE
 router.post('/', (req, res) => {
-  db.Organization.create(req.body, (error, newOrg) => {
-    if (error) {
-      res.status(400).json({ error })
+  db.Organization.findOne({name: req.body.name}, (error, foundOrg) => {
+    if (foundOrg) {
+      res.status(400).json({
+        message: 'An organization with that name already exists.'
+      })
     } else {
-      res.json({
-        message: 'Success!',
-        org: newOrg
+      db.Organization.create(req.body, (error, newOrg) => {
+        if (error) {
+          res.status(400).json({ error })
+        } else {
+          res.json({
+            message: 'Success!',
+            org: newOrg
+          })
+        }
       })
     }
   })
