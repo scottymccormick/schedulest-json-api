@@ -10,13 +10,17 @@ router.get('/', (req, res) => {
 
 // ORG CREATE
 router.post('/', (req, res) => {
-  console.log('req.body', req.body)
   db.Organization.create(req.body, (err, newOrg) => {
-    if (err) res.json(400, err)
-    res.json({
-      message: 'Success!',
-      org: newOrg
-    })
+    if (err) {
+      res.status(400).json({
+        error: err
+      })
+    } else {
+      res.json({
+        message: 'Success!',
+        org: newOrg
+      })
+    }
   })
 })
 
