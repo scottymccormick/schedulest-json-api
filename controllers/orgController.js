@@ -21,7 +21,7 @@ router.post('/', async (req, res) => {
       throw Error('An organization with that name already exists.')
     }
     const newOrg = await db.Organization.create(req.body)
-    res.json({org: newOrg})
+    res.status(201).json(newOrg)
   } catch (error) {
     res.status(400).json({message: error.message})
   }
@@ -31,7 +31,19 @@ router.post('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const foundOrg = await db.Organization.findById(req.params.id)
-    res.json({org: foundOrg})
+    res.json(foundOrg)
+  } catch (error) {
+    res.status(400).json({message: error.message})
+  }
+})
+
+// ORG UPDATE
+router.put('/:id', async (req, res) => {
+  try {
+    const updatedOrg = await db.Organization.findByIdAndUpdate(
+      req.params.id, req.body, {new: true}
+    )
+    res.json(updatedOrg)
   } catch (error) {
     res.status(400).json({message: error.message})
   }
