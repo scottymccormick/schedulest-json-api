@@ -11,7 +11,7 @@ const formatUserResponse = ({ _id, name, email, googleId, organizations }) => {
 router.get('/', async (req, res) => {
   try {
     const allUsers = await db.User.find({})
-    res.json(allUsers)
+    res.json(allUsers.map((user) => formatUserResponse(user)))
   } catch (error) {
     res.status(400).json({message: error.message})
   }
@@ -29,7 +29,7 @@ router.post('/', async (req, res) => {
     }
 
     const newUser = await db.User.create(req.body)
-    res.status(201).json(newUser)
+    res.status(201).json(formatUserResponse(newUser))
   } catch (error) {
     res.status(400).json({message: error.message})
   }
@@ -52,7 +52,7 @@ router.put('/:id', async (req, res) => {
     const foundUser = await db.User.findByIdAndUpdate(
       req.params.id, req.body, {new: true})
 
-    res.status(201).json(foundUser)
+    res.status(201).json(formatUserResponse(foundUser))
   } catch (error) {
     res.status(400).json({message: error.message})
   }
