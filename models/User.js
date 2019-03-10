@@ -3,16 +3,10 @@ const Schema = mongoose.Schema
 
 const userSchema = new Schema({
   name: String,
-  email: {
-    type: String,
-    unique: true
-  },
+  email: String,
   password: String,
   phone: String,
-  googleId: {
-    type: String,
-    unique: true
-  }
+  googleId: String
 })
 
 module.exports = mongoose.model('User', userSchema)
