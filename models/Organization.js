@@ -14,7 +14,7 @@ const orgSchema = new Schema({
   dayRate: Number,
   cancelTime: Number,
   admins: [{
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'User'
   }]
 })
