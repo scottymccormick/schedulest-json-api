@@ -4,38 +4,27 @@ const router  = express.Router()
 const db = require('../models')
 
 // ORG INDEX
-router.get('/', (req, res) => {
-  db.Organization.find({}, (error, foundOrgs) => {
-     if (error) {
-       res.status(400).json({ error })
-     } else {
-       res.json({
-         body: foundOrgs
-       })
-     }
-  })
+router.get('/', async (req, res) => {
+  try {
+    const foundOrgs = await db.Organization.find({})
+    res.json([...foundOrgs])
+  } catch (error) {
+    res.status(400).json({message: error.message})
+  }
 })
 
 // ORG CREATE
-router.post('/', (req, res) => {
-  db.Organization.findOne({name: req.body.name}, (error, foundOrg) => {
-    if (foundOrg) {
-      res.status(400).json({
-        message: 'An organization with that name already exists.'
-      })
-    } else {
-      db.Organization.create(req.body, (error, newOrg) => {
-        if (error) {
-          res.status(400).json({ error })
-        } else {
-          res.json({
-            message: 'Success!',
-            org: newOrg
-          })
-        }
-      })
+router.post('/', async (req, res) => {
+  try {
+    const existingOrg = await db.Organization.findOne({name: req.body.name})
+    if (existingOrg) {
+      throw Error('An organization with that name already exists.')
     }
-  })
+    const newOrg = await db.Organization.create(req.body)
+    res.json({org: newOrg})
+  } catch (error) {
+    res.status(400).json({message: error.message})
+  }
 })
 
 module.exports = router
