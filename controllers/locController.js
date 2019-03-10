@@ -4,8 +4,13 @@ const router  = express.Router()
 const db = require('../models')
 
 // LOC INDEX
-router.get('/', (req, res) => {
-  res.send('found loc index route')
+router.get('/', async (req, res) => {
+  try {
+    const allLocations = await db.Location.find({})
+    res.json(allLocations)
+  } catch (error) {
+    res.status(400).json({message: error.message})
+  }
 })
 
 // LOC CREATE
@@ -13,6 +18,16 @@ router.post('/', async (req, res) => {
   try {
     const newLocation = await db.Location.create(req.body)
     res.json(newLocation)
+  } catch (error) {
+    res.status(400).json({message: error.message})
+  }
+})
+
+// LOC SHOW
+router.get('/:id', async (req, res) => {
+  try {
+    const foundLocation = await db.Location.findById(req.params.id)
+    res.json(foundLocation)
   } catch (error) {
     res.status(400).json({message: error.message})
   }
