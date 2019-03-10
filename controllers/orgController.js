@@ -5,16 +5,22 @@ const db = require('../models')
 
 // ORG INDEX
 router.get('/', (req, res) => {
-  res.send('Org Index route')
+  db.Organization.find({}, (error, foundOrgs) => {
+     if (error) {
+       res.status(400).json({ error })
+     } else {
+       res.json({
+         body: foundOrgs
+       })
+     }
+  })
 })
 
 // ORG CREATE
 router.post('/', (req, res) => {
-  db.Organization.create(req.body, (err, newOrg) => {
-    if (err) {
-      res.status(400).json({
-        error: err
-      })
+  db.Organization.create(req.body, (error, newOrg) => {
+    if (error) {
+      res.status(400).json({ error })
     } else {
       res.json({
         message: 'Success!',
