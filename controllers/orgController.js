@@ -27,4 +27,14 @@ router.post('/', async (req, res) => {
   }
 })
 
+// ORG SHOW
+router.get('/:id', async (req, res) => {
+  try {
+    const foundOrg = await db.Organization.findById(req.params.id)
+    res.json({org: foundOrg})
+  } catch (error) {
+    res.status(400).json({message: error.message})
+  }
+})
+
 module.exports = router
