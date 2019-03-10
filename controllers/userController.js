@@ -4,8 +4,13 @@ const router  = express.Router()
 const db = require('../models')
 
 // USER INDEX
-router.get('/', (req, res) => {
-  res.send('Reached get route of user')
+router.get('/', async (req, res) => {
+  try {
+    const allUsers = await db.User.find({})
+    res.json(allUsers)
+  } catch (error) {
+    res.status(400).json({message: error.message})
+  }
 })
 
 // USER CREATE
