@@ -36,6 +36,7 @@ router.post('/register', async (req, res) => {
   }
 })
 
+// USER LOGIN
 router.post('/login', async (req, res) => {
   try {
     passport.authenticate('local', { session: false}, (err, user, info) => {
@@ -49,13 +50,11 @@ router.post('/login', async (req, res) => {
         if (err) {
           return res.send(err)
         }
-        console.log('reached web token', user)
         // genereate web token
-        const token = jwt.sign(JSON.stringify(user), process.env.JWT_SECRET)
+        const token = jwt.sign(JSON.stringify(user), process.env.JWT_SECRET, {expiresIn: '1d'})
         return res.json({user: formatUserResponse(user), token})
       })
     })(req, res)
-    // res.redirect('/api/v1/auth')
   } catch (error) {
     res.status(400).json({message: error.message})
   }
