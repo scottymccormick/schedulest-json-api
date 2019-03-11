@@ -1,8 +1,11 @@
 require('dotenv').config()
-const express = require('express')
-const app     = express()
-const PORT    = process.env.PORT || 9001
+const express    = require('express')
+const app        = express()
+const PORT       = process.env.PORT || 9001
 const bodyParser = require('body-parser')
+const passport   = require('passport')
+
+require('./config/passport')
 
 const db = require('./models')
 
