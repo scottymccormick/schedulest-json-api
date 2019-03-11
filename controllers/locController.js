@@ -45,4 +45,14 @@ router.put('/:id', async (req, res) => {
   }
 })
 
+// LOC DELETE
+router.delete('/:id', async (req, res) => {
+  try {
+    const deletedLocation = await db.Location.findByIdAndDelete(req.params.id)
+    res.sendStatus(204)
+  } catch (error) {
+    res.status(400).json({message: error.message})
+  }
+})
+
 module.exports = router
