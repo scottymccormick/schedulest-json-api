@@ -1,14 +1,20 @@
 module.exports = [
   {
     name: 'Jimothy',
-    email: 'test@email.com',
+    email: 'test0@email.com',
     password: '12345678',
     phone: '5551234567'
   },
   {
     name: 'Bobathon',
-    email: 'test@email.com',
-    phone: '5551234567',
-    googleId: 'alphabetsoup'
+    email: 'test1@email.com',
+    password: '12345678',
+    phone: '5551234567'
+  },
+  {
+    name: 'Carlonder',
+    email: 'test2@email.com',
+    password: '12345678',
+    phone: '5551234567'
   }
 ]
