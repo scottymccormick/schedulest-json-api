@@ -1,5 +1,6 @@
 const express = require('express')
 const router  = express.Router()
+const jwt     = require('jsonwebtoken')
 
 const db = require('../models')
 
@@ -21,7 +22,8 @@ router.get('/', async (req, res) => {
 router.get('/test', async (req, res) => {
   try {
     res.status(200).json({
-      message: "You've reached a protected route"
+      message: "You've reached a protected route",
+      user: formatUserResponse(req.user)
     })
   } catch (error) {
     res.sendStatus(400)
