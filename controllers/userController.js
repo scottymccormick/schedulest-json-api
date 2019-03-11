@@ -17,6 +17,17 @@ router.get('/', async (req, res) => {
   }
 })
 
+// USER TEST LOGIN
+router.get('/test', async (req, res) => {
+  try {
+    res.status(200).json({
+      message: "You've reached a protected route"
+    })
+  } catch (error) {
+    res.sendStatus(400)
+  }
+})
+
 // USER CREATE
 router.post('/', async (req, res) => {
   try {
