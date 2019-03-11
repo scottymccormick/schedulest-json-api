@@ -32,7 +32,7 @@ const bookingSchema = new Schema({
   },
   date: {
     type: Date,
-    min: Date.now,
+    default: Date.now,
     required: true
   },
   price: {
