@@ -33,4 +33,16 @@ router.get('/:id', async (req, res) => {
   }
 })
 
+// LOC UPDATE
+router.put('/:id', async (req, res) => {
+  try {
+    const updatedLocation = await db.Location.findByIdAndUpdate(
+      req.params.id, req.body, {new: true}
+    )
+    res.json(updatedLocation)
+  } catch (error) {
+    res.status(400).json({message: error.message})
+  }
+})
+
 module.exports = router
