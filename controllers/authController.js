@@ -7,6 +7,10 @@ const jwt      = require('jsonwebtoken')
 
 const db = require('../models')
 
+const formatUserResponse = ({ _id, name, email, googleId, organizations }) => {
+  return { _id, name, email, googleId, organizations}
+}
+
 // home route
 router.get('/', (req, res) => {
   res.json({
@@ -26,7 +30,7 @@ router.post('/register', async (req, res) => {
     userEntry.name = req.body.name
 
     const newUser = await db.User.create(userEntry)
-    res.json(newUser)
+    res.json(formatUserResponse(newUser))
   } catch (error) {
     res.status(400).json({message: error.message})
   }
@@ -48,7 +52,7 @@ router.post('/login', async (req, res) => {
         console.log('reached web token', user)
         // genereate web token
         const token = jwt.sign(JSON.stringify(user), process.env.JWT_SECRET)
-        return res.json({user, token})
+        return res.json({user: formatUserResponse(user), token})
       })
     })(req, res)
     // res.redirect('/api/v1/auth')
