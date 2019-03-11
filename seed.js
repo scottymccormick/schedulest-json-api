@@ -4,6 +4,7 @@ const db = require('./models')
 
 const userSeed = require('./models/userSeed')
 const orgSeed  = require('./models/orgSeed')
+const locSeed  = require('./models/locSeed')
 
 const runSeedProcess = async () => {
   try {
@@ -32,7 +33,17 @@ const runSeedProcess = async () => {
     const newOrgs = await db.Organization.create(orgSeed)
     console.log(`Created ${newOrgs.length} new orgs`)
 
-    // Add first user to org's admin list
+    // Create locations, associate with new org
+    const newLocSeed = locSeed.map((loc) => {
+      return {
+        ...loc,
+        organization: newOrgs[0]._id
+      }
+    })
+    const newLocs = await db.Location.create(newLocSeed)
+    console.log(`Created ${newLocs.length} new locations`)
+
+    // Add first user and all locations to org's admin list
     const updatedAdminList = {
       admins: [newUsers[0]._id]
     }
