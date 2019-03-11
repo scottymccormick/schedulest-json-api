@@ -6,8 +6,14 @@ const db = require('../models')
 // LOC INDEX
 router.get('/', async (req, res) => {
   try {
-    const allLocations = await db.Location.find({})
-    res.json(allLocations)
+    if (req.query.org) {
+      const allLocations = await db.Location.find({})
+      res.json(allLocations)
+    } else {
+      // get all users for a certain org
+      const orgLocs = await db.Location.find({organization: req.query.org})
+      res.json(orgLocs)
+    }
   } catch (error) {
     res.status(400).json({message: error.message})
   }
