@@ -1,14 +1,24 @@
 const passport      = require('passport')
 const LocalStrategy = require('passport-local').Strategy
 const User          = require('../models/User')
+const bcrypt        = require('bcryptjs')
 
-passport.use(new LocalStrategy(
+passport.use(new LocalStrategy({
+    usernameField: 'email'
+  },
   function(email, password, done) {
-    User.findOne({ email }, function(err, user) {
+    User.findOne({ email: email }, function(err, user) {
       if (err) return done(err)
-      if (!user) return done(null, false)
-      if (user.password !== password) return done(null, false)
-      return done(null, user)
+      if (!user) {
+        console.log('inside no user')
+        return done(null, false, {message: 'No user found'})
+      }
+      if (!bcrypt.compareSync(password, user.password)) {
+        console.log('inside compare sync')
+        return done(null, false, {message: 'bad password'})
+      }
+      console.log('inside found the user')
+      return done(null, user, {message: 'Logged in successfully'})
     })
   }
 ))

@@ -1,8 +1,17 @@
-const express = require('express')
-const router  = express.Router()
-const bcrypt  = require('bcryptjs')
+const express  = require('express')
+const router   = express.Router()
+const bcrypt   = require('bcryptjs')
+const passport = require('passport')
+const jwt      = require('jsonwebtoken')
 
 const db = require('../models')
+
+// home route
+router.get('/', (req, res) => {
+  res.json({
+    message: 'found home route',
+    user: req.user})
+})
 
 // USER REGISTER
 router.post('/register', async (req, res) => {
@@ -22,9 +31,26 @@ router.post('/register', async (req, res) => {
   }
 })
 
-router.post('/login', (req, res) => {
+router.post('/login', async (req, res) => {
   try {
-    res.send('login route reached')
+    passport.authenticate('local', { session: false}, (err, user) => {
+      if (err || !user) {
+        return res.status(400).json({
+          message: 'Something not right',
+          user: user
+        })
+      }
+      req.login(user, {session: false}, (err) => {
+        if (err) {
+          return res.send(err)
+        }
+        console.log('reached web token', user)
+        // genereate web token
+        const token = jwt.sign(user.toJSON(), 'jwt_secret')
+        return res.json({user, token})
+      })
+    })(req, res)
+    // res.redirect('/api/v1/auth')
   } catch (error) {
     res.status(400).json({message: error.message})
   }
