@@ -6,7 +6,7 @@ const db = require('../models')
 // LOC INDEX
 router.get('/', async (req, res) => {
   try {
-    if (req.query.org) {
+    if (!req.query.org) {
       const allLocations = await db.Location.find({})
       res.json(allLocations)
     } else {
