@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express  = require('express')
 const router   = express.Router()
 const bcrypt   = require('bcryptjs')
@@ -33,10 +34,10 @@ router.post('/register', async (req, res) => {
 
 router.post('/login', async (req, res) => {
   try {
-    passport.authenticate('local', { session: false}, (err, user) => {
+    passport.authenticate('local', { session: false}, (err, user, info) => {
       if (err || !user) {
         return res.status(400).json({
-          message: 'Something not right',
+          message: info ? info.message : 'Something not right',
           user: user
         })
       }
@@ -46,7 +47,7 @@ router.post('/login', async (req, res) => {
         }
         console.log('reached web token', user)
         // genereate web token
-        const token = jwt.sign(user.toJSON(), 'jwt_secret')
+        const token = jwt.sign(JSON.stringify(user), process.env.JWT_SECRET)
         return res.json({user, token})
       })
     })(req, res)
