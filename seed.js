@@ -16,6 +16,14 @@ const runSeedProcess = async () => {
     const deletedOrgs = await db.Organization.deleteMany({})
     console.log(`Deleted ${deletedOrgs.n} organizations`)
 
+    // Remove locations
+    const deletedLocs = await db.Location.deleteMany({})
+    console.log(`Deleted ${deletedLocs.n} locations`)
+
+    // Remove bookings
+    const deletedBookings = await db.Booking.deleteMany({})
+    console.log(`Deleted ${deletedBookings.n} bookings`)
+
     // hash passwords
     const newUserSeed = userSeed.map((user) => {
       return {
