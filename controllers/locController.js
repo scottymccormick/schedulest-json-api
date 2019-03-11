@@ -12,6 +12,13 @@ router.get('/', async (req, res) => {
     } else {
       // get all users for a certain org
       const orgLocs = await db.Location.find({organization: req.query.org})
+      orgLocs.sort((a,b) => {
+        const nameA = a.name.toLowerCase()
+        const nameB = b.name.toLowerCase()
+        if (nameA < nameB) return -1
+        if (nameA > nameB) return 1
+        return 0
+      })
       res.json(orgLocs)
     }
   } catch (error) {
