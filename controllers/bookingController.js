@@ -33,4 +33,16 @@ router.get('/:id', async (req, res) => {
   }
 })
 
+// BOOKING UPDATE
+router.put('/:id', async (req, res) => {
+  try {
+    const updatedBooking = await db.Booking.findByIdAndUpdate(
+      req.params.id, req.body, {new: true}
+    )
+    res.json(updatedBooking)
+  } catch (error) {
+    res.status(400).json({message: error.message})
+  }
+})
+
 module.exports = router
