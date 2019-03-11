@@ -3,8 +3,13 @@ const router  = express.Router()
 
 const db = require('../models')
 
-router.get('/', (req, res) => {
-  res.send('reached booking index route')
+router.get('/', async (req, res) => {
+  try {
+    const allBookings = await db.Booking.find({})
+    res.json(allBookings)
+  } catch (error) {
+    res.status(400).json({message: error.message})
+  }
 })
 
 // BOOKING CREATE
