@@ -25,9 +25,7 @@ router.get('/', async (req, res) => {
       for (let i = 0; i < orgLocs.length; i++) {
         const location = orgLocs[i];
         const locBookings = await db.Booking.find({location: location._id})
-        responseBody.push({
-          [location._id]: locBookings
-        })
+        responseBody.push(locBookings)
       }
 
 
