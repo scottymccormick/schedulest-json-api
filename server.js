@@ -19,12 +19,13 @@ const orgController     = require('./controllers/orgController')
 const userController    = require('./controllers/userController')
 const locController     = require('./controllers/locController')
 const bookingController = require('./controllers/bookingController')
+const authController    = require('./controllers/authController')
 
 app.use('/api/v1/orgs', orgController)
 app.use('/api/v1/users', userController)
 app.use('/api/v1/locs', locController)
 app.use('/api/v1/bookings', bookingController)
-
+app.use('/api/v1/auth', authController)
 
 app.listen(PORT, () => {
   console.log('Listening on', PORT)
