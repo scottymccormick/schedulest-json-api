@@ -11,8 +11,15 @@ const formatUserResponse = ({ _id, name, email, googleId, organizations }) => {
 // USER INDEX
 router.get('/', async (req, res) => {
   try {
-    const allUsers = await db.User.find({})
-    res.json(allUsers.map((user) => formatUserResponse(user)))
+    if (!req.query.org) {
+      const allUsers = await db.User.find({})
+      res.json(allUsers.map((user) => formatUserResponse(user)))
+    } else {
+      // get all users for a certain org
+      const orgUsers = await db.User.find({organizations: req.query.org})
+      res.json(orgUsers.map((user) => formatUserResponse(user)))
+    }
+
   } catch (error) {
     res.status(400).json({message: error.message})
   }
