@@ -4,6 +4,7 @@ const app        = express()
 const PORT       = process.env.PORT || 9001
 const bodyParser = require('body-parser')
 const passport   = require('passport')
+const cors       = require('cors')
 
 require('./config/passport')
 
@@ -14,6 +15,11 @@ app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 
 app.use(passport.initialize())
+
+app.use(cors({
+  origin: ['http://localhost:9000',],
+  optionsSuccessStatus: 200
+}))
 
 const orgController     = require('./controllers/orgController')
 const userController    = require('./controllers/userController')
