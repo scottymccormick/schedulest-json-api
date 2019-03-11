@@ -12,9 +12,11 @@ app.use(bodyParser.json())
 
 const orgController = require('./controllers/orgController')
 const userController = require('./controllers/userController')
+const locController = require('./controllers/locController')
 
 app.use('/api/v1/orgs', orgController)
 app.use('/api/v1/users', userController)
+app.use('/api/v1/locs', locController)
 
 app.listen(PORT, () => {
   console.log('Listening on', PORT)
