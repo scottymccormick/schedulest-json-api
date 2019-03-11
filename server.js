@@ -13,6 +13,8 @@ const db = require('./models')
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 
+app.use(passport.initialize())
+
 const orgController     = require('./controllers/orgController')
 const userController    = require('./controllers/userController')
 const locController     = require('./controllers/locController')
