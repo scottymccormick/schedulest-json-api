@@ -9,6 +9,12 @@ const dateSort = (a, b) => {
   return 0
 }
 
+const timeSort = (a, b) => {
+  if (a.startTime < b.startTime) return -1
+  if (a.startTime > b.startTime) return 1
+  return 0
+}
+
 //  BOOKING INDEX
 router.get('/', async (req, res) => {
   try {
@@ -42,16 +48,27 @@ router.get('/', async (req, res) => {
         }
         res.json(responseBody)
 
-      // group by date, one location, one org
+      // group by date, one location, one org, date range
       } else {
         const locationId = req.query.loc
-        const locBookings = await db.Booking.find({location: locationId})
+        const startDate = req.query.from
+        const endDate = req.query.to
+        const locBookings = await db.Booking.find({
+          location: locationId,
+          date: {
+            $gte: startDate,
+            $lte: endDate
+          }
+        })
         const dateMap = {}
         locBookings.map((booking) => {
           const bookingDate = booking.date.toDateString()
           const existingArr = dateMap[bookingDate] || []
           dateMap[bookingDate] = [...existingArr,  booking]
         })
+        for (let date in dateMap) {
+          dateMap[date] = dateMap[date].sort(timeSort)
+        }
         res.json(dateMap)
       }
 
