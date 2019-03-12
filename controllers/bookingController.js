@@ -12,27 +12,44 @@ router.get('/', async (req, res) => {
     } else {
       // get all users for a certain org
       const orgLocs = await db.Location.find({organization: req.query.org})
-      orgLocs.sort((a,b) => {
-        const nameA = a.name.toLowerCase()
-        const nameB = b.name.toLowerCase()
-        if (nameA < nameB) return -1
-        if (nameA > nameB) return 1
-        return 0
-      })
 
-      const responseBody = []
+      // group by location
+      if (!req.query.groupBy) {
 
-      for (let i = 0; i < orgLocs.length; i++) {
-        const location = orgLocs[i];
-        const locBookings = await db.Booking.find({location: location._id})
-        responseBody.push({
-          info: location,
-          bookings: locBookings
+        orgLocs.sort((a,b) => {
+          const nameA = a.name.toLowerCase()
+          const nameB = b.name.toLowerCase()
+          if (nameA < nameB) return -1
+          if (nameA > nameB) return 1
+          return 0
         })
+        
+        const responseBody = []
+        
+        for (let i = 0; i < orgLocs.length; i++) {
+          const location = orgLocs[i];
+          const locBookings = await db.Booking.find({location: location._id})
+          responseBody.push({
+            info: location,
+            bookings: locBookings
+          })
+        }
+        res.json(responseBody)
+
+      // group by date, one location, one org
+      } else {
+        const locationId = req.query.loc
+        const locBookings = await db.Booking.find({location: locationId})
+        const dateMap = {}
+        locBookings.map((booking) => {
+          const bookingDate = booking.date.toDateString()
+          const existingArr = dateMap[bookingDate] || []
+          dateMap[bookingDate] = [...existingArr,  booking]
+        })
+        res.json(dateMap)
       }
 
 
-      res.json(responseBody)
     }
 
 
