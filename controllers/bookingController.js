@@ -22,31 +22,33 @@ router.get('/', async (req, res) => {
       const allBookings = await db.Booking.find({})
       res.json(allBookings)
     } else {
-      // get all users for a certain org
+      // get all bookinds for a certain org
       const orgLocs = await db.Location.find({organization: req.query.org})
+      const orgBookings = await db.Booking.find({location : {$in: orgLocs}})
 
       // group by location
       if (!req.query.groupBy) {
 
-        orgLocs.sort((a,b) => {
-          const nameA = a.name.toLowerCase()
-          const nameB = b.name.toLowerCase()
-          if (nameA < nameB) return -1
-          if (nameA > nameB) return 1
-          return 0
-        })
+        // orgLocs.sort((a,b) => {
+        //   const nameA = a.name.toLowerCase()
+        //   const nameB = b.name.toLowerCase()
+        //   if (nameA < nameB) return -1
+        //   if (nameA > nameB) return 1
+        //   return 0
+        // })
         
-        const responseBody = []
+        // const responseBody = []
         
-        for (let i = 0; i < orgLocs.length; i++) {
-          const location = orgLocs[i];
-          const locBookings = await db.Booking.find({location: location._id})
-          responseBody.push({
-            info: location,
-            bookings: locBookings.sort(dateSort)
-          })
-        }
-        res.json(responseBody)
+        // for (let i = 0; i < orgLocs.length; i++) {
+        //   const location = orgLocs[i];
+        //   const locBookings = await db.Booking.find({location: location._id})
+        //   responseBody.push({
+        //     info: location,
+        //     bookings: locBookings.sort(dateSort)
+        //   })
+        // }
+        // res.json(responseBody)
+        res.json(orgBookings)
 
       // group by date, one location, one org, date range
       } else {
