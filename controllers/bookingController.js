@@ -3,6 +3,12 @@ const router  = express.Router()
 
 const db = require('../models')
 
+const dateSort = (a, b) => {
+  if (a.date < b.date) return -1
+  if (a.date > b.date) return 1
+  return 0
+}
+
 //  BOOKING INDEX
 router.get('/', async (req, res) => {
   try {
@@ -31,7 +37,7 @@ router.get('/', async (req, res) => {
           const locBookings = await db.Booking.find({location: location._id})
           responseBody.push({
             info: location,
-            bookings: locBookings
+            bookings: locBookings.sort(dateSort)
           })
         }
         res.json(responseBody)
