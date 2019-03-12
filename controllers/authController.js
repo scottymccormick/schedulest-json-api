@@ -50,8 +50,8 @@ router.post('/login', async (req, res) => {
         if (err) {
           return res.send(err)
         }
-        // genereate web token
-        const token = jwt.sign(JSON.stringify(user), process.env.JWT_SECRET, {expiresIn: '1d'})
+        // genereate web token - have to fix mongo object issue
+        const token = jwt.sign(JSON.parse(JSON.stringify(user)), process.env.JWT_SECRET, {expiresIn: '1h'})
         return res.json({user: formatUserResponse(user), token})
       })
     })(req, res)

@@ -6,8 +6,36 @@ const db = require('../models')
 //  BOOKING INDEX
 router.get('/', async (req, res) => {
   try {
-    const allBookings = await db.Booking.find({})
-    res.json(allBookings)
+    if (!req.query.org) {
+      const allBookings = await db.Booking.find({})
+      res.json(allBookings)
+    } else {
+      // get all users for a certain org
+      const orgLocs = await db.Location.find({organization: req.query.org})
+      orgLocs.sort((a,b) => {
+        const nameA = a.name.toLowerCase()
+        const nameB = b.name.toLowerCase()
+        if (nameA < nameB) return -1
+        if (nameA > nameB) return 1
+        return 0
+      })
+
+      const responseBody = []
+
+      for (let i = 0; i < orgLocs.length; i++) {
+        const location = orgLocs[i];
+        const locBookings = await db.Booking.find({location: location._id})
+        responseBody.push({
+          info: location,
+          bookings: locBookings
+        })
+      }
+
+
+      res.json(responseBody)
+    }
+
+
   } catch (error) {
     res.status(400).json({message: error.message})
   }

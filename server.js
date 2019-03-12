@@ -17,8 +17,9 @@ app.use(bodyParser.json())
 app.use(passport.initialize())
 
 app.use(cors({
-  origin: ['http://localhost:9000',],
-  optionsSuccessStatus: 200
+  origin: ['http://localhost:3000'],
+  optionsSuccessStatus: 200,
+  credentials: true
 }))
 
 const orgController     = require('./controllers/orgController')

@@ -23,11 +23,11 @@ const bookingSchema = new Schema({
     default: Date.now
   },
   startTime: {
-    type: String,
+    type: Date,
     required: true
   },
   endTime: {
-    type: String,
+    type: Date,
     required: true
   },
   date: {
