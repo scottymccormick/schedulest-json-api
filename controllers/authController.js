@@ -28,9 +28,14 @@ router.post('/register', async (req, res) => {
     userEntry.email = req.body.email
     userEntry.password = hashedPassword
     userEntry.name = req.body.name
+    userEntry.organizations = [req.body.organization]
 
     const newUser = await db.User.create(userEntry)
-    res.json(formatUserResponse(newUser))
+    console.log(newUser)
+    const token = jwt.sign(JSON.parse(JSON.stringify(newUser)), process.env.JWT_SECRET, {expiresIn: '1h'})
+    // return res.json({user: formatUserResponse(newUser), token})
+
+    res.json({user: formatUserResponse(newUser), token})
   } catch (error) {
     res.status(400).json({message: error.message})
   }
