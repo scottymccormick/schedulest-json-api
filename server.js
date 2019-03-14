@@ -17,7 +17,7 @@ app.use(bodyParser.json())
 app.use(passport.initialize())
 
 app.use(cors({
-  origin: ['http://localhost:3000'],
+  origin: ['http://localhost:3000', 'https://schedulest-tool.herokuapp.com'],
   optionsSuccessStatus: 200,
   credentials: true
 }))
