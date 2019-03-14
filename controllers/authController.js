@@ -29,8 +29,27 @@ router.post('/register', async (req, res) => {
     userEntry.password = hashedPassword
     userEntry.name = req.body.name
 
+    // Add ability to create organization when registering
+    if (req.body.orgName) {
+      const existingOrg = await db.Organization.findOne({name: req.body.orgName})
+      if (existingOrg) {
+        throw Error('An organization with that name already exists.')
+      }
+      const newOrgBody = {
+        name: req.body.orgName,
+        hourlyRate: 20,
+        dayRate: 80,
+        cancelTime: 24
+      }
+      const newOrg = await db.Organization.create(newOrgBody)
+      userEntry.organizations = [newOrg._id]
+    } else {
+      userEntry.organizations = [req.body.orgId]
+    }
     const newUser = await db.User.create(userEntry)
-    res.json(formatUserResponse(newUser))
+    const token = jwt.sign(JSON.parse(JSON.stringify(newUser)), process.env.JWT_SECRET, {expiresIn: '1h'})
+
+    res.json({user: formatUserResponse(newUser), token})
   } catch (error) {
     res.status(400).json({message: error.message})
   }
