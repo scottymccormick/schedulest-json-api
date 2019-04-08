@@ -47,6 +47,15 @@ router.post('/register', async (req, res) => {
       userEntry.organizations = [req.body.orgId]
     }
     const newUser = await db.User.create(userEntry)
+    // add user to their new org
+    if (req.body.orgName) {
+      const newOrgId = userEntry.organizations[0]
+      const newOrgData = {
+        admins: [newUser._id]
+      }
+      await db.Organization.findByIdAndUpdate(newOrgId, newOrgData)
+    }
+    
     const token = jwt.sign(JSON.parse(JSON.stringify(newUser)), process.env.JWT_SECRET, {expiresIn: '1h'})
 
     res.json({user: formatUserResponse(newUser), token})
